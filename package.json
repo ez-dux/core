@@ -18,7 +18,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/schardtbc/ts-package-template.git"
+    "url": "git+https://github.com/ez-dux/core.git"
   },
   "keywords": [],
   "author": "Wagner J. Silva",
@@ -44,10 +44,13 @@
     "ts-jest": "^26.4.4",
     "typescript": "^4.1.3",
     "chai": "^4.2.0",
-    "@types/chai": "^4.2.14"
+    "@types/chai": "^4.2.14",
+    "@types/lodash": "^4.14.166"
   },
   "files": [
     "lib/**/*"
   ],
-  "dependencies": {}
+  "dependencies": {
+    "lodash": "4.13.1"
+  }
 }
