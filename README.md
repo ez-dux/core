@@ -1,3 +1,11 @@
 ## ez-dux/core
 
-ez-dux is a tool set to make your redux life easier
+Basic module
+
+createActionCreator<'TYPE', PayloadType, MetaType>('TYPE') // returns function(payload: PayloadType, meta: MetaType) {
+type: 'Type', payload, meta
+}
+
+createSelector<Type, RootState>(...entries) // returns function(state: RootState): Type
+
+Reducer 

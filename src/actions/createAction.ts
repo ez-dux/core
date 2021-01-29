@@ -1,15 +1,33 @@
-import { ActionCreator, Action } from '../types';
+import {
+  ActionCreator,
+  ActionCreatorWithNoParameters,
+  ActionCreatorWithOnlyPayload,
+  Action,
+  ActionWithOnlyPayload,
+  ActionWithOnlyType,
+} from '../types';
 
-export function createAction<T extends string, P = null, M extends null = null>(
+export function createActionCreator<T extends string, P = null, M = null>(
   type: T,
-): ActionCreator<T, P, M> {
-  function action(payload: P, meta: M): Action<T, P, M> {
+): M extends null
+  ? P extends null
+    ? ActionCreatorWithNoParameters<T>
+    : ActionCreatorWithOnlyPayload<T, P>
+  : ActionCreator<T, P, M> {
+  function actionCreator(payload: P, meta: M): Action<T, P, M>;
+  function actionCreator(payload: P): ActionWithOnlyPayload<T, P>;
+  function actionCreator(): ActionWithOnlyType<T> {
     return {
       type,
-      payload,
-      meta,
+      payload: (null as unknown) as P,
+      meta: null,
     };
   }
-  action.type = type;
-  return action;
+  actionCreator.type = type;
+
+  return (actionCreator as unknown) as M extends null
+    ? P extends null
+      ? ActionCreatorWithNoParameters<T>
+      : ActionCreatorWithOnlyPayload<T, P>
+    : ActionCreator<T, P, M>;
 }
