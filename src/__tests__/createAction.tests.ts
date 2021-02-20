@@ -20,7 +20,9 @@ describe('Tests createActionCreator function', () => {
     });
   });
   it('Returns the action with payload and meta', () => {
-    const action = createActionCreator<{ test: 'uu' }, 'TEST', { id: 'bb' }>('TEST');
+    const action = createActionCreator<{ test: 'uu' }, 'TEST', { id: 'bb' }>(
+      'TEST',
+    );
     expect(action({ test: 'uu' }, { id: 'bb' })).to.be.deep.eq({
       type: 'TEST',
       payload: { test: 'uu' },
