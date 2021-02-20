@@ -3,10 +3,10 @@ import join from 'lodash/join';
 import isEmpty from 'lodash/isEmpty';
 import { Selector } from '../types';
 
-export function createSelector<RootState, I = null>(
+export function createSelector<R, I = null>(
   ...entries: string[]
-): Selector<RootState, I> {
-  return function selector(state: RootState): I {
+): Selector<R, I> {
+  return function selector(state: R): I {
     if (state && !isEmpty(entries)) {
       return get(state, join(entries, '.'));
     }

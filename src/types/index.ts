@@ -1,33 +1,66 @@
-export interface Action<T extends string, P = null, M = null> {
+import { A } from 'ts-toolbelt';
+
+interface ActionWithOnlyType<T extends string = string> {
   type: T;
+}
+interface ActionWithOnlyPayload<P = undefined, T extends string = string>
+  extends ActionWithOnlyType<T> {
+  payload: P;
+}
+interface ActionWithPayloadAndMeta<
+  P = undefined,
+  T extends string = string,
+  M = undefined
+> extends ActionWithOnlyPayload<P, T> {
   payload: P;
   meta: M;
 }
-export interface ActionWithOnlyType<T extends string> {
-  type: T;
-}
-export interface ActionWithOnlyPayload<T extends string, P> {
-  type: T;
-  payload: P;
-}
+
+export type Action<
+  P = undefined,
+  T extends string = string,
+  M = undefined
+> = M extends undefined
+  ? P extends undefined
+    ? ActionWithOnlyType<T>
+    : ActionWithOnlyPayload<P, T>
+  : ActionWithPayloadAndMeta<P, T, M>;
 
 interface ActionCreatorStatic<T extends string> {
   type: T;
 }
-export interface ActionCreator<T extends string, P = null, M = null>
+interface ActionCreatorWithNoParameters<T extends string>
   extends ActionCreatorStatic<T> {
-  (payload: P, meta: M): Action<T, P, M>;
-}
-export interface ActionCreatorWithOnlyPayload<T extends string, P>
-  extends ActionCreatorStatic<T> {
-  (payload: P): ActionWithOnlyPayload<T, P>;
+  (): Action<T>;
 }
 
-export interface ActionCreatorWithNoParameters<T extends string>
+interface ActionCreatorWithOnlyPayload<P = undefined, T extends string = string>
   extends ActionCreatorStatic<T> {
-  (): ActionWithOnlyType<T>;
+  (payload: P): Action<P, T>;
 }
+
+interface ActionCreatorWithPayloadAndMeta<
+  P = undefined,
+  T extends string = string,
+  M = undefined
+> extends ActionCreatorStatic<T> {
+  (payload: P, meta: M): Action<P, T, M>;
+}
+
+export type ActionCreator<
+  P = undefined,
+  T extends string = string,
+  M = undefined
+> = M extends undefined
+  ? P extends undefined
+    ? ActionCreatorWithNoParameters<T>
+    : ActionCreatorWithOnlyPayload<P, T>
+  : ActionCreatorWithPayloadAndMeta<P, T, M>;
 
 export interface Selector<RootState, I> {
   (state: RootState): I;
+}
+
+export interface Reducer<A extends Action, S> {
+  (state: S, action: A): S;
 }
